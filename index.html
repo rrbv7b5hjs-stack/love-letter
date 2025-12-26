@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>💌 Love Letter</title>
+<link href="https://fonts.googleapis.com/css2?family=Anton&display=swap" rel="stylesheet">
+<style>
+body {
+  margin: 0;
+  height: 100vh;
+  background: linear-gradient(135deg,#f6e6cf,#fdf6ea);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+  font-family: 'Anton', sans-serif;
+}
+
+/* Letter stays centered */
+.letter {
+  position: relative;
+  width: 360px;
+  height: 300px;
+  background: #fdf6ea;
+  border-radius: 18px;
+  padding: 25px;
+  box-shadow: 0 25px 50px rgba(0,0,0,0.35);
+  z-index: 10;
+  opacity: 0; /* hidden initially */
+  transition: opacity 0.8s ease;
+  text-align: center;
+  overflow: hidden;
+}
+
+h1 {
+  font-family: 'Anton', sans-serif;
+  font-size: 28px;
+  color: #7b1e1e;
+  margin-bottom: 10px;
+}
+
+p {
+  font-family: 'Anton', sans-serif;
+  font-size: 16px;
+  line-height: 1.4;
+  color: #3f2a1d;
+  margin: 4px 0;
+}
+
+/* Envelope container */
+.envelope-wrapper {
+  position: absolute;
+  width: 360px;
+  height: 260px;
+  cursor: pointer;
+  z-index: 20; 
+  transition: transform 1s ease, opacity 1s ease;
+}
+
+/* Envelope back */
+.envelope-back {
+  position: absolute;
+  inset: 0;
+  background: #d8b384;
+  border-radius: 18px;
+  z-index: 1;
+}
+
+/* Envelope front */
+.envelope-front {
+  position: absolute;
+  inset: 0;
+  background: #c9a46a;
+  border-radius: 18px;
+  z-index: 4;
+}
+
+/* Flap */
+.flap {
+  position: absolute;
+  inset: 0;
+  background: #c9a46a;
+  clip-path: polygon(0 0, 100% 0, 50% 65%);
+  transform-origin: top;
+  transition: opacity 0.8s ease;
+  z-index: 6;
+}
+
+/* Flap disappears when opened */
+.envelope-wrapper.open .flap {
+  opacity: 0;
+}
+
+/* Envelope moves up and fades */
+.envelope-wrapper.up {
+  transform: translateY(-500px);
+  opacity: 0;
+}
+
+/* Hearts and fireworks outside letter */
+.heart, .firework {
+  position: absolute;
+  pointer-events: none;
+  user-select: none;
+}
+
+.heart {
+  color: #e74c3c;
+  font-size: 20px;
+  animation: floatUp linear forwards;
+}
+
+@keyframes floatUp {
+  0% { transform: translateY(0) scale(1); opacity: 1;}
+  100% { transform: translateY(-120vh) scale(1.5); opacity: 0;}
+}
+
+.firework {
+  color: #f1c40f;
+  font-size: 18px;
+  animation: explode linear forwards;
+}
+
+@keyframes explode {
+  0% { transform: scale(0.3) rotate(0deg); opacity: 1;}
+  100% { transform: scale(2) rotate(360deg); opacity: 0;}
+}
+</style>
+</head>
+<body>
+
+<audio id="openSound">
+  <source src="https://cdn.pixabay.com/audio/2022/03/10/audio_8c9d1bca3c.mp3">
+</audio>
+<audio id="music" loop>
+  <source src="https://cdn.pixabay.com/audio/2022/03/15/audio_7f3f0c4c1d.mp3">
+</audio>
+
+<!-- Letter (stays in center) -->
+<div class="letter" id="letter">
+  <h1>My Dearest Love</h1>
+  <p>Happy 16 months of being together baby,</p>
+  <p>I LOVE YOU SO MUCHHHHH &lt;3</p>
+  <p>Mwahhh 💋💋💋</p>
+  <p>To my dearest Ramu, thank you for everything that you've done.</p>
+  <p>Thank you so much for keeping me the happiest girl in the world ❤</p>
+</div>
+
+<!-- Envelope -->
+<div class="envelope-wrapper" id="envelope">
+  <div class="envelope-back"></div>
+  <div class="envelope-front"></div>
+  <div class="flap"></div>
+  <div class="seal">✉</div>
+</div>
+
+<script>
+let opened = false;
+const envelope = document.getElementById('envelope');
+const letter = document.getElementById('letter');
+
+envelope.addEventListener('click', () => {
+  if(opened) return;
+  opened = true;
+
+  // Play music and envelope sound
+  document.getElementById('music').play();
+  document.getElementById('openSound').play();
+
+  // Show letter fully
+  letter.style.opacity = 1;
+
+  // Move envelope up
+  envelope.classList.add('up');
+
+  // Start hearts and fireworks
+  startHearts();
+  startFireworks();
+});
+
+// Floating hearts
+function startHearts() {
+  setInterval(()=>{
+    const h = document.createElement('div');
+    h.className='heart';
+    h.innerHTML='❤';
+    h.style.left=Math.random()*window.innerWidth+'px';
+    h.style.top=window.innerHeight+'px';
+    h.style.fontSize=(10+Math.random()*20)+'px';
+    h.style.animationDuration=(3+Math.random()*3)+'s';
+    document.body.appendChild(h);
+    setTimeout(()=>h.remove(),6000);
+  },300);
+}
+
+// Fireworks
+function startFireworks() {
+  setInterval(()=>{
+    const f = document.createElement('div');
+    f.className='firework';
+    f.innerHTML='✨';
+    f.style.left=Math.random()*window.innerWidth+'px';
+    f.style.top=Math.random()*window.innerHeight+'px';
+    f.style.fontSize=(15+Math.random()*20)+'px';
+    f.style.animationDuration=(2+Math.random()*2)+'s';
+    document.body.appendChild(f);
+    setTimeout(()=>f.remove(),4000);
+  },500);
+}
+</script>
+</body>
+</html>
